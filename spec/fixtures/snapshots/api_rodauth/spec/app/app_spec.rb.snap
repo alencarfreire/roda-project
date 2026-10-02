@@ -3,9 +3,10 @@ require_relative "../spec_helper"
 describe "hello" do
   it "test requests" do
     get "/"
-    expect(last_response.status).to eq(302)
+    expect(last_response.status).to eq(200)
   end
   
+  # run "RACK_ENV=test bin/roda db migrate" to make this spec pass
   it "test models" do
     Account.create(email: "foo@bar.com")
 

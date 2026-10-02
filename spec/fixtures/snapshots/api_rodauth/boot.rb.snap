@@ -22,7 +22,6 @@ loader.collapse("#{__dir__}/app/models")
 # loader.push_dir("#{__dir__}/app/#{path}")
 # end
 loader.setup
-require "debug" if Config.not_production?
 
 Oj.mimic_JSON
 
@@ -34,8 +33,9 @@ Providers::Logger.boot
 # Consts
 DB = Providers::DB::Conn.get
 
-# Automatic models annotations in dev environment
 if Config.not_production?
+  require "debug"
+  # Automatic models annotations in dev environment
   require 'sequel/annotate'
   Sequel::Annotate.annotate(Dir['app/models/*.rb'], position: :before, border: true) rescue nil
 end
