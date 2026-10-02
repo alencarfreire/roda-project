@@ -1,5 +1,8 @@
 ## [Unreleased]
 
+## [0.1.15] - 2026-10-02
+- Fix failing specs after scaffold
+
 ## [0.1.14] - 2026-09-22
 - Fix PostgreSQL `bin/roda db create/drop` (broken interpolation, booted the app before the DB existed)
 - Fix invalid `environment:,,` in generated config when Rodauth is off
