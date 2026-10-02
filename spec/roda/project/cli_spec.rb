@@ -38,6 +38,8 @@ RSpec.describe Roda::Project::CLI do
       "app/routes/foo.rb",
       "app/config/config.rb",
       "spec/app/app_spec.rb",
+      "spec/app/routes/foo_spec.rb",
+      "spec/app/app_spec.rb",
       "spec/spec_helper.rb"
     ]
 

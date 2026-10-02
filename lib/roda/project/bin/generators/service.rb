@@ -96,12 +96,10 @@ class Roda
           end
 
           def parse_args
-            @parse_args ||= begin
-              if %w[module class].include?(@args[0].to_s.downcase)
-                { type: @args[0].to_s.downcase, name: @args[1].to_s }
-              else
-                { type: "class", name: @args[0].to_s }
-              end
+            @parse_args ||= if %w[module class].include?(@args[0].to_s.downcase)
+              {type: @args[0].to_s.downcase, name: @args[1].to_s}
+            else
+              {type: "class", name: @args[0].to_s}
             end
           end
 
