@@ -21,8 +21,8 @@ loader.collapse("#{__dir__}/services")
 # end
 loader.setup
 
-require "debug" if NOT_PRODUCTION
-
 Oj.mimic_JSON
+
+require "debug" if NOT_PRODUCTION
 
 require_relative "app"

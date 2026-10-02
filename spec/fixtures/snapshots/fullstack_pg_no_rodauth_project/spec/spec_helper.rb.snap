@@ -14,6 +14,6 @@ RSpec.configure do |config|
   end
   
   def app
-    FullstackPgNoRodauthProject.freeze.app
+    FullstackPgNoRodauthProject.app
   end
 end

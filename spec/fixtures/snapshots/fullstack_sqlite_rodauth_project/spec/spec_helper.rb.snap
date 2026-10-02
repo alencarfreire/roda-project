@@ -11,7 +11,7 @@ class Minitest::HooksSpec
   include Rack::Test::Methods
 
   def app
-    FullstackSqliteRodauthProject.freeze.app
+    FullstackSqliteRodauthProject.app
   end
 end
 

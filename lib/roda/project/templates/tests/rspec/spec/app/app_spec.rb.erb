@@ -2,12 +2,12 @@ require_relative "../spec_helper"
 
 describe "hello" do
   it "test requests" do
-    get "/"<% if context.rodauth? %>
-    expect(last_response.status).to eq(302)<% else %>
+    get "/"
     expect(last_response.status).to eq(200)<% if context.fullstack? %>
-    expect(last_response.body).to include("Hello world")<% end %><% end %>
+    expect(last_response.body).to include("Hello world")<% end %>
   end
   <% if context.rodauth? %>
+  # run "RACK_ENV=test bin/roda db migrate" to make this spec pass
   it "test models" do
     Account.create(email: "foo@bar.com")
 
