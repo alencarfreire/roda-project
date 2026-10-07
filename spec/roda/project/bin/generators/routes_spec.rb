@@ -96,10 +96,10 @@ RSpec.describe Roda::Project::Bin::Generators::Routes do
           test_content = File.read("spec/app/routes/users_spec.rb")
 
           # Notice: Asserts the exact string rendered by the generator (including the missing closing quotes)
-          expect(test_content).to include("it \"responds to GET /users do")
-          expect(test_content).to include("get \"/users\n")
-          expect(test_content).to include("it \"responds to POST /users do")
-          expect(test_content).to include("post \"/users\n")
+          expect(test_content).to include("it \"responds to GET /users\" do")
+          expect(test_content).to include("get \"/users\"\n")
+          expect(test_content).to include("it \"responds to POST /users\" do")
+          expect(test_content).to include("post \"/users\"\n")
         end
 
         context "when views option is true" do

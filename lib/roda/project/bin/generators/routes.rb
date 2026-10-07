@@ -84,8 +84,8 @@ class Roda
                   "    expect(last_response.status).to eq(200)\n" \
                   "  end"
               else
-                "  it \"responds to #{method.upcase} /#{branch_name} do\n" \
-                  "    #{method} \"/#{branch_name}\n" \
+                "  it \"responds to #{method.upcase} /#{branch_name}\" do\n" \
+                  "    #{method} \"/#{branch_name}\"\n" \
                   "    expect(last_response.status).to eq(200)\n" \
                   "  end"
               end
