@@ -123,12 +123,8 @@ RSpec.describe Roda::Project::Bin::Generators::Routes do
         context "with single sublevel (e.g. a/b)" do
           let(:args) { ["admin/users", "list:get"] }
 
-          it "creates nested directories, correct hash_branch format, and outputs reminder" do
-            expect { generator.call }.to output(
-              include("dont forget to add:")
-                .and(include("autoload_hash_branch_dir(:admin, \"./app/routes/admin\")"))
-                .and(include("r.on(\"admin\") { r.hash_branches(:admin) }"))
-            ).to_stdout
+          it "creates nested directories, correct hash_branch format" do
+            generator.call
 
             expect(File.exist?("app/routes/admin/users.rb")).to be true
             expect(File.exist?("spec/app/routes/admin/users_spec.rb")).to be true
@@ -150,12 +146,8 @@ RSpec.describe Roda::Project::Bin::Generators::Routes do
         context "with multiple sublevels (e.g. a/b/c)" do
           let(:args) { ["a/b/c", "show:get"] }
 
-          it "creates correct hash_branch format and outputs reminder for deep nesting" do
-            expect { generator.call }.to output(
-              include("dont forget to add:")
-                .and(include("autoload_hash_branch_dir(:\"a/b\", \"./app/routes/a/b\")"))
-                .and(include("r.on(\"a/b\") { r.hash_branches(:\"a/b\") }"))
-            ).to_stdout
+          it "creates correct hash_branch format for deep nesting" do
+            generator.call
 
             expect(File.exist?("app/routes/a/b/c.rb")).to be true
             expect(File.exist?("app/routes/a.rb")).to be true
@@ -177,12 +169,8 @@ RSpec.describe Roda::Project::Bin::Generators::Routes do
         context "with four sublevels (e.g. a/b/c/d)" do
           let(:args) { ["a/b/c/d", "show:get"] }
 
-          it "creates correct hash_branch format and outputs reminder for four sublevels" do
-            expect { generator.call }.to output(
-              include("dont forget to add:")
-                .and(include("autoload_hash_branch_dir(:\"a/b/c\", \"./app/routes/a/b/c\")"))
-                .and(include("r.on(\"a/b/c\") { r.hash_branches(:\"a/b/c\") }"))
-            ).to_stdout
+          it "creates correct hash_branch format for four sublevels" do
+            generator.call
 
             expect(File.exist?("app/routes/a/b/c/d.rb")).to be true
             expect(File.exist?("app/routes/a.rb")).to be true

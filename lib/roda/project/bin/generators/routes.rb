@@ -15,7 +15,6 @@ class Roda
             generate_nested_branch_files
             generate_views
             generate_tests
-            print_nested_branch_reminder
           end
 
           private
@@ -170,19 +169,6 @@ class Roda
 
           def branch_name
             @branch_name ||= @args[0]
-          end
-
-          def print_nested_branch_reminder
-            return unless branch_name.include?("/")
-
-            parts = branch_name.split("/")
-            sub_path = parts[0..-2].join("/")
-
-            puts "\ndont forget to add:\n\n" \
-                 "autoload_hash_branch_dir(#{namespace_for(sub_path)}, \"./app/routes/#{sub_path}\")\n\n" \
-                 "route do |r|\n" \
-                 " r.on(\"#{sub_path}\") { r.hash_branches(#{namespace_for(sub_path)}) }\n" \
-                 "end\n"
           end
         end
       end
