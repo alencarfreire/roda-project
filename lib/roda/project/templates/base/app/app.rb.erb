@@ -2,7 +2,8 @@ class <%= context.const_project_name %> < Roda
   # Routing<% if context.fullstack? %>
   plugin :hash_branch_view_subdir<% end %>
   plugin :autoload_hash_branches
-  autoload_hash_branch_dir("./app/routes")
+  HASH_BRANCHES.each { |args| autoload_hash_branch_dir(*args) }
+
   plugin :all_verbs
   plugin :not_found
   <% if context.fullstack? %>

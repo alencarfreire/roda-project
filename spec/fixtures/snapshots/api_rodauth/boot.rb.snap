@@ -32,6 +32,18 @@ Providers::Logger.boot
 
 # Consts
 DB = Providers::DB::Conn.get
+ROUTES_DIR = "./app/routes"
+base_path = Pathname.new(ROUTES_DIR)
+HASH_BRANCHES = []
+HASH_BRANCHES << [base_path]
+Dir.glob(File.join(ROUTES_DIR, "**/*")).each do |dir_path|
+  next unless File.directory?(dir_path)
+
+  path = Pathname.new(dir_path)
+  relative_path = path.relative_path_from(base_path).to_s
+
+  HASH_BRANCHES << [relative_path.to_sym, path.to_s]
+end
 
 if Config.not_production?
   require "debug"
