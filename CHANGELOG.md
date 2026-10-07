@@ -1,5 +1,10 @@
 ## [Unreleased]
 
+## [0.1.16] - 2026-10-07
+- Programmatically loads the hash_branches 
+- Change hash_branch_view_namespace to hash_branch_view_subdir
+- fix "g routes" spec generator
+
 ## [0.1.15] - 2026-10-02
 - Fix failing specs after scaffold
 

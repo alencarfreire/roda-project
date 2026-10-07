@@ -1,8 +1,9 @@
 class FullstackSqliteRodauthProject < Roda
   # Routing
-  plugin :hash_branch_view_namespace
+  plugin :hash_branch_view_subdir
   plugin :autoload_hash_branches
-  autoload_hash_branch_dir("./app/routes")
+  HASH_BRANCHES.each { |args| autoload_hash_branch_dir(*args) }
+
   plugin :all_verbs
   plugin :not_found
   

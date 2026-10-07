@@ -19,7 +19,6 @@ gem "puma"
 
 # Views
 gem 'roda-assets_manifest'
-gem 'roda-hash_branch_view_namespace'
 
 # Performance
 gem "oj"

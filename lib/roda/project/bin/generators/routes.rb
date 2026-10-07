@@ -12,9 +12,9 @@ class Roda
 
             puts "* creating routes"
             generate_routes
+            generate_nested_branch_files
             generate_views
             generate_tests
-            print_nested_branch_reminder
           end
 
           private
@@ -37,9 +37,8 @@ class Roda
             hash_branch_header = if branch_name.include?("/")
               parts = branch_name.split("/")
               sub_path = parts[0..-2].join("/")
-              namespace = sub_path.include?("/") ? ":\"#{sub_path}\"" : ":#{sub_path}"
               branch_segment = parts.last
-              "hash_branch #{namespace}, \"#{branch_segment}\" do |r|"
+              "hash_branch #{namespace_for(sub_path)}, \"#{branch_segment}\" do |r|"
             else
               "hash_branch \"#{branch_name}\" do |r|"
             end
@@ -85,8 +84,8 @@ class Roda
                   "    expect(last_response.status).to eq(200)\n" \
                   "  end"
               else
-                "  it \"responds to #{method.upcase} /#{branch_name} do\n" \
-                  "    #{method} \"/#{branch_name}\n" \
+                "  it \"responds to #{method.upcase} /#{branch_name}\" do\n" \
+                  "    #{method} \"/#{branch_name}\"\n" \
                   "    expect(last_response.status).to eq(200)\n" \
                   "  end"
               end
@@ -101,6 +100,57 @@ class Roda
             RUBY
             File.write(test_filename, test_content)
             action_success_message(test_filename)
+          end
+
+          def generate_nested_branch_files
+            return unless branch_name.include?("/")
+
+            parts = branch_name.split("/")
+            parts[0..-2].each_with_index do |_segment, index|
+              prefix = parts[0..index].join("/")
+              filename = File.join("app/routes", "#{prefix}.rb")
+
+              if File.exist?(filename)
+                ensure_hash_branches_line(filename, namespace_for(prefix))
+                next
+              end
+
+              dir = File.dirname(filename)
+              FileUtils.mkdir_p(dir) unless File.directory?(dir)
+              File.write(filename, nested_branch_file_content(prefix, index))
+              action_success_message(filename)
+            end
+          end
+
+          def nested_branch_file_content(prefix, index)
+            parts = prefix.split("/")
+            segment = parts.last
+            header = if index.zero?
+              "hash_branch \"#{segment}\" do |r|"
+            else
+              parent_path = parts[0..-2].join("/")
+              "hash_branch #{namespace_for(parent_path)}, \"#{segment}\" do |r|"
+            end
+
+            <<~RUBY
+              class #{@context.const_project_name}
+                #{header} # #{prefix} branch
+                  r.hash_branches(#{namespace_for(prefix)}) # #{prefix}/ +1 routes
+                end
+              end
+            RUBY
+          end
+
+          def ensure_hash_branches_line(filename, namespace)
+            expected_line = "r.hash_branches(#{namespace})"
+            return if File.read(filename).include?(expected_line)
+
+            puts "  warning: #{filename} already exists — please add:"
+            puts "    #{expected_line}"
+          end
+
+          def namespace_for(sub_path)
+            sub_path.include?("/") ? ":\"#{sub_path}\"" : ":#{sub_path}"
           end
 
           def must_generate_views?
@@ -119,20 +169,6 @@ class Roda
 
           def branch_name
             @branch_name ||= @args[0]
-          end
-
-          def print_nested_branch_reminder
-            return unless branch_name.include?("/")
-
-            parts = branch_name.split("/")
-            sub_path = parts[0..-2].join("/")
-            namespace = sub_path.include?("/") ? ":\"#{sub_path}\"" : ":#{sub_path}"
-
-            puts "\ndont forget to add:\n\n" \
-                 "autoload_hash_branch_dir(#{namespace}, \"./app/routes/#{sub_path}\")\n\n" \
-                 "route do |r|\n" \
-                 " r.on(\"#{sub_path}\") { r.hash_branches(#{namespace}) }\n" \
-                 "end\n"
           end
         end
       end
